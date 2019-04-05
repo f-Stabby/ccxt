@@ -35,9 +35,11 @@ class bibox (Exchange):
             'has': {
                 'CORS': False,
                 'publicAPI': False,
+                'fetchWithdrawals': True,
                 'fetchBalance': True,
                 'fetchCurrencies': True,
                 'fetchDepositAddress': True,
+                'fetchDeposits':True,
                 'fetchFundingFees': True,
                 'fetchTickers': True,
                 'fetchOrder': True,
@@ -590,6 +592,32 @@ class bibox (Exchange):
             'info': response,
         }
         return result
+
+    def fetch_withdrawals(self, code, params={}):
+        self.load_markets()
+        response = self.privatePostTransfer({
+            'cmd': 'transfer/transferInList',
+            'body': self.extend({
+                'search': code,
+                'filter_type': 0,
+                'page': 1,
+                'size': 25
+            }, params)
+        })
+        return response["result"]["items"]
+
+    def fetch_deposits(self, code, params={}):
+        self.load_markets()
+        response = self.privatePostTransfer({
+            'cmd': 'transfer/transferOutList',
+            'body': self.extend({
+                'search': code,
+                'filter_type': 0,
+                'page': 1,
+                'size': 25
+            }, params)
+        })
+        return response["result"]["items"]
 
     def withdraw(self, code, amount, address, tag=None, params={}):
         self.check_address(address)
