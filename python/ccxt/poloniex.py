@@ -6,6 +6,7 @@
 from ccxt.base.exchange import Exchange
 import hashlib
 import math
+import pdb
 from ccxt.base.errors import ExchangeError
 from ccxt.base.errors import AuthenticationError
 from ccxt.base.errors import PermissionDenied
